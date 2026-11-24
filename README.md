@@ -87,7 +87,7 @@ git push -u origin main
 
 在 GitHub 仓库中：`Settings` → `Pages` → `Build and deployment` → `Source` 选择 **GitHub Actions**。
 
-（workflow 里的 `actions/configure-pages` 已带 `enablement: true`，首次运行通常会自动开启 Pages；若失败，手动按上面选择一次即可。）
+> 这一步必须由仓库管理员手动开启一次（`GITHUB_TOKEN` 无权限自动创建 Pages 站点）。开启后，重新运行 Actions 里的 deploy workflow，或再 push 一次即可发布。
 
 之后每次 push 到 `main` / `master`，workflow 会：
 
