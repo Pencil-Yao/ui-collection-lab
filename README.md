@@ -66,45 +66,28 @@ npm run build    # production build check
 
 ## 部署到 GitHub Pages
 
-仓库已包含 `.github/workflows/deploy.yml` 和 `public/.nojekyll`。生产构建使用相对路径（`base: './'`），因此既能部署到：
+已部署：**https://pencil-yao.github.io/ui-collection-lab/**
 
-- `https://<user>.github.io/`（用户主页仓库）
-- `https://<user>.github.io/ui-collection-lab/`（项目仓库）
+仓库使用 `gh-pages` 分支发布：`.github/workflows/deploy.yml` 在 push 到 `main`/`master` 时自动构建，并把 `dist/` 推到 `gh-pages` 分支。生产构建使用相对路径（`base: './'`），所以可以在 `https://<user>.github.io/ui-collection-lab/` 这类项目子路径下正常加载。
 
-### 1. 推送到 GitHub
+### 首次推到 GitHub
 
 ```bash
-git add -A
-git commit -m "deploy: ui collection lab"
-git branch -M main
 git remote add origin git@github.com:<user>/ui-collection-lab.git
-git push -u origin main
+git push -u origin master
 ```
 
-> 若已有 remote，直接 `git push` 即可。workflow 同时监听 `main` 和 `master`，当前分支是 `master` 也能触发。
+workflow 同时监听 `main` 和 `master`。
 
-### 2. 开启 GitHub Pages
+### 开启 GitHub Pages（新仓库首次）
 
-在 GitHub 仓库中：`Settings` → `Pages` → `Build and deployment` → `Source` 选择 **GitHub Actions**。
+在 GitHub 仓库中：`Settings` → `Pages` → `Build and deployment` → `Source` 选择 **Deploy from a branch**，分支选 **gh-pages** / **(root)**。
 
-> 这一步必须由仓库管理员手动开启一次（`GITHUB_TOKEN` 无权限自动创建 Pages 站点）。开启后，重新运行 Actions 里的 deploy workflow，或再 push 一次即可发布。
+> 本仓库推送 `gh-pages` 分支后已被自动开启，无需再设置；若换了新仓库，按上面设置一次即可。
 
-之后每次 push 到 `main` / `master`，workflow 会：
+之后每次 push：`npm ci` → `npm run build` → `peaceiris/actions-gh-pages` 把 `dist/` 推到 `gh-pages` → 站点更新。也可在 Actions 页面手动 `Run workflow`。
 
-1. 使用 Node 24 `npm ci`
-2. `npm run build`
-3. 上传 `dist/`
-4. 发布到 GitHub Pages
-
-站点地址：
-
-```text
-https://<user>.github.io/ui-collection-lab/
-```
-
-首次部署需要几十秒到几分钟；后续 push 自动更新。
-
-> 注意：`node_modules/`、`dist/`、`out/` 已在 `.gitignore` 中忽略（构建在 CI 内完成，视频/封面等 `out/` 产物不随网页发布）。
+> `node_modules/`、`dist/`、`out/` 已在 `.gitignore` 中忽略（构建在 CI 内完成，视频/封面等 `out/` 产物不随网页发布）。
 
 ## Licensing
 
