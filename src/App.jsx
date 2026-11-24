@@ -7,6 +7,16 @@ import { Meteors } from '../magicui/meteors/src/Meteors';
 import { MorphingText } from '../magicui/morphing-text/src/MorphingText';
 import { techIcons } from './techIcons';
 
+// Component IDs double as in-page anchors, e.g. `/#globe` or `/#icon-cloud`.
+const COMPONENTS = [
+  { id: 'animated-circular-progress-bar', title: 'Animated Circular Progress Bar' },
+  { id: 'dia-text-reveal', title: 'Dia Text Reveal' },
+  { id: 'globe', title: 'Globe' },
+  { id: 'icon-cloud', title: 'Icon Cloud' },
+  { id: 'meteors', title: 'Meteors' },
+  { id: 'morphing-text', title: 'Morphing Text' }
+];
+
 const useCycle = (step = 10, interval = 1600) => {
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -19,6 +29,24 @@ const useCycle = (step = 10, interval = 1600) => {
 const App = () => {
   const live = useCycle(10, 1600);
 
+  // Scroll to the component referenced by the URL hash (works on load and on
+  // clicks of the index links; the element may mount after the browser's own
+  // initial hash scroll).
+  useEffect(() => {
+    const scrollToHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    const timer = setTimeout(scrollToHash, 60);
+    window.addEventListener('hashchange', scrollToHash);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('hashchange', scrollToHash);
+    };
+  }, []);
+
   return (
     <div className="lab">
       <header className="lab-header">
@@ -27,11 +55,19 @@ const App = () => {
         <p className="lab-sub">
           Black-gray themed components, one square frame each. Full source ships under <code>magicui/</code>.
         </p>
+        <nav className="lab-index" aria-label="Component index">
+          {COMPONENTS.map(({ id, title }) => (
+            <a key={id} href={`#${id}`} title={title}>
+              <span className="lab-index__slug">#{id}</span>
+              <span className="lab-index__title">{title}</span>
+            </a>
+          ))}
+        </nav>
       </header>
 
       <main className="lab-stage">
         <div className="showcase">
-          <figure className="showcase__cell">
+          <figure className="showcase__cell" id="animated-circular-progress-bar">
             <figcaption className="showcase__caption">
               <span className="showcase__title">Animated Circular Progress Bar</span>
               <span className="showcase__meta">{live}%</span>
@@ -41,7 +77,7 @@ const App = () => {
             </div>
           </figure>
 
-          <figure className="showcase__cell">
+          <figure className="showcase__cell" id="dia-text-reveal">
             <figcaption className="showcase__caption">
               <span className="showcase__title">Dia Text Reveal</span>
               <span className="showcase__meta">sweep</span>
@@ -56,7 +92,7 @@ const App = () => {
             </div>
           </figure>
 
-          <figure className="showcase__cell">
+          <figure className="showcase__cell" id="globe">
             <figcaption className="showcase__caption">
               <span className="showcase__title">Globe</span>
               <span className="showcase__meta">WebGL</span>
@@ -68,7 +104,7 @@ const App = () => {
             </div>
           </figure>
 
-          <figure className="showcase__cell">
+          <figure className="showcase__cell" id="icon-cloud">
             <figcaption className="showcase__caption">
               <span className="showcase__title">Icon Cloud</span>
               <span className="showcase__meta">drag</span>
@@ -80,7 +116,7 @@ const App = () => {
             </div>
           </figure>
 
-          <figure className="showcase__cell">
+          <figure className="showcase__cell" id="meteors">
             <figcaption className="showcase__caption">
               <span className="showcase__title">Meteors</span>
               <span className="showcase__meta">shower</span>
@@ -96,7 +132,7 @@ const App = () => {
             </div>
           </figure>
 
-          <figure className="showcase__cell">
+          <figure className="showcase__cell" id="morphing-text">
             <figcaption className="showcase__caption">
               <span className="showcase__title">Morphing Text</span>
               <span className="showcase__meta">gooey</span>
