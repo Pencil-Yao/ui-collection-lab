@@ -1,0 +1,51 @@
+.meteors {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.meteors__item {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 9999px;
+  background: #d4d4d8;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+  z-index: 1;
+  animation-name: meteors-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+.meteors__tail {
+  position: absolute;
+  top: 50%;
+  z-index: -1;
+  width: 60px;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(to right, #71717a, rgba(113, 113, 122, 0));
+}
+
+@keyframes meteors-fall {
+  0% {
+    transform: rotate(var(--angle)) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateX(-400px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meteors__item {
+    animation: none;
+    opacity: 0;
+  }
+}

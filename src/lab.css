@@ -30,7 +30,7 @@ body {
 
 .lab-header {
   max-width: 1100px;
-  margin: 0 auto 56px;
+  margin: 0 auto 48px;
 }
 
 .lab-kicker {
@@ -67,139 +67,153 @@ body {
 
 .lab-stage {
   display: flex;
-  flex-direction: column;
-  gap: 64px;
+  justify-content: center;
   max-width: 1100px;
   margin: 0 auto;
 }
 
-.lab-section {
+.showcase {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
 }
 
-.lab-section__head {
+.showcase__cell {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 300px;
+  max-width: 380px;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #17171a 0%, #121214 100%);
+  box-shadow: 0 24px 48px -30px rgba(0, 0, 0, 0.9);
+  container-type: inline-size;
+}
+
+.showcase__caption {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.lab-section__title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #e4e4e7;
-}
-
-.lab-section__hint {
-  font-size: 12px;
-  color: #71717a;
-}
-
-/* Animated Circular Progress Bar */
-
-.acp-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  background: linear-gradient(180deg, #17171a 0%, #121214 100%);
-  box-shadow: 0 24px 48px -30px rgba(0, 0, 0, 0.9);
-}
-
-.acp-card--feature {
-  width: min(420px, 100%);
-  align-self: center;
-}
-
-.acp-card__head {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  color: #a1a1aa;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.acp-card__meta {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: normal;
-  text-transform: none;
-  color: #71717a;
-}
-
-.acp-card__label {
-  font-size: 12px;
+.showcase__title {
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #71717a;
-}
-
-.acp-row {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.acp-row .acp-card {
-  padding: 22px 16px;
-}
-
-/* Dia Text Reveal */
-
-.dia-card {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  padding: 48px clamp(24px, 4vw, 44px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  background: linear-gradient(180deg, #17171a 0%, #121214 100%);
-  box-shadow: 0 24px 48px -30px rgba(0, 0, 0, 0.9);
-}
-
-.dia-line {
-  margin: 0;
   color: #a1a1aa;
-  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.dia-line__text {
-  font-size: 24px;
+.showcase__meta {
+  flex: none;
+  font-size: 11px;
+  color: #71717a;
+  font-variant-numeric: tabular-nums;
+}
+
+.showcase__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.showcase__reveal {
+  font-size: clamp(20px, 3.4vw, 34px);
   font-weight: 700;
   letter-spacing: -0.02em;
+  text-align: center;
 }
 
-.dia-headline {
-  margin: 0;
-  color: #fafafa;
-  font-size: clamp(26px, 4vw, 40px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+.showcase__body--globe {
+  padding: 0;
 }
 
-.dia-caption {
-  margin: 0;
+.showcase__globe {
+  position: relative;
+  width: min(88cqw, 320px);
+  aspect-ratio: 1 / 1;
+}
+
+.showcase__body--icon-cloud {
+  padding: 0;
+}
+
+.showcase__icon-cloud {
+  position: relative;
+  width: min(90cqw, 320px);
+  aspect-ratio: 1 / 1;
+}
+
+.showcase__body--meteors {
+  padding: 0;
+  align-items: stretch;
+}
+
+.showcase__meteors {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(82, 82, 91, 0.32), transparent 65%),
+    #0b0b0d;
+  container-type: inline-size;
+}
+
+.showcase__meteors-copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.showcase__meteors-kicker {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: #71717a;
-  font-size: 12.5px;
 }
 
-@media (max-width: 720px) {
-  .acp-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.showcase__meteors-title {
+  font-size: clamp(18px, 5.6cqw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fafafa;
+}
+
+.showcase__body--morphing {
+  padding: 0;
+}
+
+.showcase__morphing {
+  width: 100%;
+  padding: 0 8px;
+  font-size: clamp(26px, 8cqw, 44px);
+  color: #f4f4f5;
+}
+
+.showcase__morphing .morphing-text {
+  height: 1.15em;
 }

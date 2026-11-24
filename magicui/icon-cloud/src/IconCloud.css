@@ -1,0 +1,64 @@
+.icon-cloud {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  --icon-size: 36px;
+  --icon-cloud-color: #d4d4d8;
+}
+
+.icon-cloud:active {
+  cursor: grabbing;
+}
+
+.icon-cloud__stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.icon-cloud.is-ready .icon-cloud__stage {
+  opacity: 1;
+}
+
+.icon-cloud__item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  margin-top: calc(var(--icon-size) / -2);
+  margin-left: calc(var(--icon-size) / -2);
+  color: var(--icon-cloud-color);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+}
+
+.icon-cloud__item svg,
+.icon-cloud__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.icon-cloud__item img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-cloud__stage {
+    transition: none;
+  }
+}

@@ -27,3 +27,9 @@ This skill repackages Magic UI's "Animated Circular Progress Bar"
 to plain CSS (no Tailwind / clsx), black-gray default palette, and an extra
 `size` / `unit` / `transitionLength` / `delay` API. The upstream MIT notice above
 is retained as required.
+
+---
+
+The current repository distributes this skill under the MIT license; see the
+repository root `LICENSE`. The notice above applies to the portions derived
+from Magic UI.

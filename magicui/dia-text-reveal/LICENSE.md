@@ -27,3 +27,9 @@ This skill repackages Magic UI's "Dia Text Reveal"
 JavaScript, removed the Tailwind class dependency (uses a `dia-text-reveal`
 base class), black-gray default palette, and black-gray `textColor` default.
 The upstream MIT notice above is retained as required.
+
+---
+
+The current repository distributes this skill under the MIT license; see the
+repository root `LICENSE`. The notice above applies to the portions derived
+from Magic UI.

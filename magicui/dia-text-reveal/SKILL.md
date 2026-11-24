@@ -81,7 +81,8 @@ Override per instance:
 - Text is rendered with `color: transparent` + `background-clip: text`, so the background gradient shows through the glyphs.
 - `buildGradient(pos, colors, textColor)` builds a `linear-gradient(90deg, …)` with a `±17%` traveling band: left of the band = `textColor`, inside the band = `colors`, right of the band = `transparent` (not yet revealed). At the end the whole text is solid `textColor`.
 - Animation: `motion`'s `animate(useMotionValue, SWEEP_START → SWEEP_END, { ease: sweepEase })` with a custom cubic ease; `useTransform` maps the position to the gradient. `useInView` gates `startOnView`.
-- Multi-text: measures each string width with a hidden ghost node and animates the span width; with `fixedWidth` it locks to the widest.
+- Multi-text: measures each string width with a hidden ghost node (re-measured on container resize and `document.fonts.ready`) and sizes the box to the active string, so text is never clipped; `fixedWidth` locks to the widest string. `line-height` is `1.25` so ascenders/descenders aren't shaved by `overflow: hidden`.
+- The box width is applied directly (no width transition), so switching strings can't transiently clip the wider text.
 - `useReducedMotion` jumps straight to the finished state.
 
 ## Accessibility

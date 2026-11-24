@@ -47,7 +47,8 @@ function measureWidths(el, texts) {
   el.parentElement.appendChild(ghost);
   const widths = texts.map(t => {
     ghost.textContent = t;
-    return ghost.getBoundingClientRect().width;
+    // +1px buffer so sub-pixel rounding never clips the last glyph
+    return Math.ceil(ghost.getBoundingClientRect().width) + 1;
   });
   ghost.remove();
   return widths;
@@ -95,8 +96,29 @@ export function DiaTextReveal({
   useEffect(() => {
     const el = spanRef.current;
     if (!el || !isMulti) return;
-    setMeasuredWidths(measureWidths(el, texts));
-  }, [Array.isArray(text) ? text.join('\0') : text]);
+
+    const remeasure = () => setMeasuredWidths(measureWidths(el, texts));
+    remeasure();
+
+    // Re-measure when the container resizes or fonts load, otherwise the box
+    // can be narrower than the text and clip it.
+    const target = el.parentElement || el;
+    const observer = new ResizeObserver(remeasure);
+    observer.observe(target);
+    window.addEventListener('resize', remeasure);
+    let cancelled = false;
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        if (!cancelled) remeasure();
+      });
+    }
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      window.removeEventListener('resize', remeasure);
+    };
+  }, [Array.isArray(text) ? text.join('\0') : text, isMulti]);
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -156,12 +178,10 @@ export function DiaTextReveal({
           display: 'inline-block',
           overflow: 'hidden',
           whiteSpace: 'nowrap',
-          verticalAlign: 'text-center',
-          ...(fixedW != null && { width: fixedW })
+          verticalAlign: 'bottom',
+          width: fixedW ?? animatedW
         })
       }}
-      animate={animatedW != null ? { width: animatedW } : undefined}
-      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
       {...props}
     >
       {texts[activeIndex]}
