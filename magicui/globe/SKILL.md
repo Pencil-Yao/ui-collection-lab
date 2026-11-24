@@ -51,6 +51,7 @@ Custom config (markers, colors, rotation):
 | --- | --- | --- | --- |
 | `className` | `string` | `''` | Extra class names on the root wrapper. |
 | `config` | `COBEOptions` | `GLOBE_CONFIG` | Full cobe config (see below). |
+| `speed` | `number` | `1` | Auto-rotation multiplier. Rotation is time-based (`0.3 rad/s × speed`), so it is frame-rate independent; e.g. `speed={8}` spins ~8× faster. |
 
 ### Key `config` fields (cobe)
 
@@ -59,9 +60,10 @@ Custom config (markers, colors, rotation):
 | `dark` | `1` | Dark globe rendering. |
 | `diffuse` | `0.4` | Surface diffuse lighting. |
 | `mapSamples` | `16000` | Dot-map sampling density. |
-| `mapBrightness` | `1.2` | Dot-map brightness. |
-| `baseColor` | `[0.25, 0.25, 0.28]` | Globe base color (RGB 0–1). |
-| `markerColor` | `[0.9, 0.9, 0.92]` | Marker dot color. |
+| `mapBrightness` | `2.5` | Dot-map (terrain) brightness. |
+| `mapBaseBrightness` | `0` | Minimum map-sample value. Must be a number — `undefined` becomes a NaN uniform and blanks the sphere. |
+| `baseColor` | `[0.9, 0.9, 0.95]` | Land-dot / base color (RGB 0–1). Near-white here for bright terrain dots on a dark sphere. |
+| `markerColor` | `[1, 1, 1]` | Marker dot color. |
 | `glowColor` | `[0.3, 0.3, 0.33]` | Rim glow color. |
 | `theta` | `0.3` | Tilt. |
 | `phi` | `0` | Initial rotation. |

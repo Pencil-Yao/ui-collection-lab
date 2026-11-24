@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import './Meteors.css';
 
@@ -15,6 +15,7 @@ export function Meteors({
   angle = 240,
   className = ''
 }) {
+  const containerRef = useRef(null);
   const [meteors, setMeteors] = useState([]);
 
   useEffect(() => {
@@ -30,8 +31,33 @@ export function Meteors({
     setMeteors(styles);
   }, [number, minDelay, maxDelay, minDuration, maxDuration, angle]);
 
+  // Scale the travel distance to the container so meteors always cross the full
+  // height (reaching the middle/bottom) no matter how large the box is, instead
+  // of tailing off after a fixed number of pixels.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const apply = () => {
+      const height = el.clientHeight || 0;
+      const rad = (angle * Math.PI) / 180;
+      const sin = Math.max(Math.abs(Math.sin(rad)), 0.35);
+      const distance = (height * 1.15) / sin;
+      el.style.setProperty('--meteor-distance', `${Math.round(distance)}px`);
+    };
+
+    apply();
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(apply) : null;
+    observer?.observe(el);
+    return () => observer?.disconnect();
+  }, [angle]);
+
   return (
-    <div className={['meteors', className].filter(Boolean).join(' ')} aria-hidden="true">
+    <div
+      ref={containerRef}
+      className={['meteors', className].filter(Boolean).join(' ')}
+      aria-hidden="true"
+    >
       {meteors.map((style, index) => (
         <span key={index} className="meteors__item" style={style}>
           <span className="meteors__tail" />

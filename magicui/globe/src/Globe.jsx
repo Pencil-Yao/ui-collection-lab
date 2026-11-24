@@ -19,8 +19,9 @@ export const GLOBE_CONFIG = {
   diffuse: 0.4,
   mapSamples: 16000,
   mapBrightness: 2.5,
-  baseColor: [0.25, 0.25, 0.28],
-  markerColor: [0.9, 0.9, 0.92],
+  mapBaseBrightness: 0,
+  baseColor: [0.9, 0.9, 0.95],
+  markerColor: [1, 1, 1],
   glowColor: [0.3, 0.3, 0.33],
   markers: [
     { location: [14.5995, 120.9842], size: 0.03 },
@@ -36,10 +37,11 @@ export const GLOBE_CONFIG = {
   ]
 };
 
-export function Globe({ className = '', config = GLOBE_CONFIG }) {
+export function Globe({ className = '', config = GLOBE_CONFIG, speed = 1 }) {
   const canvasRef = useRef(null);
   const phiRef = useRef(0);
   const widthRef = useRef(0);
+  const lastTimeRef = useRef(0);
   const pointerInteracting = useRef(null);
   const pointerInteractionMovement = useRef(0);
 
@@ -72,15 +74,26 @@ export function Globe({ className = '', config = GLOBE_CONFIG }) {
     window.addEventListener('resize', onResize);
     onResize();
 
+    lastTimeRef.current = performance.now();
+
     const globe = createGlobe(canvas, {
       ...config,
       width: widthRef.current * 2,
       height: widthRef.current * 2,
       onRender: state => {
-        if (!pointerInteracting.current) phiRef.current += 0.005;
-        state.phi = phiRef.current + rs.get();
-        state.width = widthRef.current * 2;
-        state.height = widthRef.current * 2;
+        // Time-based auto-rotation (radians/second) so the speed is consistent
+        // regardless of frame rate, and scales with the `speed` prop.
+        const now = performance.now();
+        const dt = Math.min(Math.max((now - lastTimeRef.current) / 1000, 0), 0.1);
+        lastTimeRef.current = now;
+        if (!pointerInteracting.current) phiRef.current += 0.3 * speed * dt;
+        // Guard against non-finite values: a single NaN phi/size leaks into the
+        // shader uniforms and makes the whole sphere (and its map dots) vanish.
+        const drag = rs.get();
+        const size = (widthRef.current || canvas.offsetWidth || 300) * 2;
+        state.phi = phiRef.current + (Number.isFinite(drag) ? drag : 0);
+        state.width = size;
+        state.height = size;
       }
     });
 
@@ -93,7 +106,7 @@ export function Globe({ className = '', config = GLOBE_CONFIG }) {
       globe.destroy();
       window.removeEventListener('resize', onResize);
     };
-  }, [rs, config]);
+  }, [rs, config, speed]);
 
   return (
     <div className={['globe', className].filter(Boolean).join(' ')}>
