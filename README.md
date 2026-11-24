@@ -64,6 +64,48 @@ npm run dev      # http://localhost:5173
 npm run build    # production build check
 ```
 
+## 部署到 GitHub Pages
+
+仓库已包含 `.github/workflows/deploy.yml` 和 `public/.nojekyll`。生产构建使用相对路径（`base: './'`），因此既能部署到：
+
+- `https://<user>.github.io/`（用户主页仓库）
+- `https://<user>.github.io/ui-collection-lab/`（项目仓库）
+
+### 1. 推送到 GitHub
+
+```bash
+git add -A
+git commit -m "deploy: ui collection lab"
+git branch -M main
+git remote add origin git@github.com:<user>/ui-collection-lab.git
+git push -u origin main
+```
+
+> 若已有 remote，直接 `git push` 即可。workflow 同时监听 `main` 和 `master`，当前分支是 `master` 也能触发。
+
+### 2. 开启 GitHub Pages
+
+在 GitHub 仓库中：`Settings` → `Pages` → `Build and deployment` → `Source` 选择 **GitHub Actions**。
+
+（workflow 里的 `actions/configure-pages` 已带 `enablement: true`，首次运行通常会自动开启 Pages；若失败，手动按上面选择一次即可。）
+
+之后每次 push 到 `main` / `master`，workflow 会：
+
+1. 使用 Node 24 `npm ci`
+2. `npm run build`
+3. 上传 `dist/`
+4. 发布到 GitHub Pages
+
+站点地址：
+
+```text
+https://<user>.github.io/ui-collection-lab/
+```
+
+首次部署需要几十秒到几分钟；后续 push 自动更新。
+
+> 注意：`node_modules/`、`dist/`、`out/` 已在 `.gitignore` 中忽略（构建在 CI 内完成，视频/封面等 `out/` 产物不随网页发布）。
+
 ## Licensing
 
 The repository is MIT-licensed — see the root [`LICENSE`](./LICENSE). All components are based on Magic UI (MIT) — see each skill's `LICENSE.md` for the upstream notice. No react-bits component source is included (react-bits is MIT + Commons Clause and cannot be redistributed as components).
