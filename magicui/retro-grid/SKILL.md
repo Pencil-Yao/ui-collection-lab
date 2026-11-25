@@ -1,8 +1,8 @@
 ---
 name: retro-grid
-description: A retro perspective grid background — a tilted floor of lines scrolling from the far horizon toward the viewer (far→near), fading into the horizon and near edge, with optional centered text. Rendered on a 2D <canvas> with anti-aliasing (no WebGL needed) so lines don't shimmer. Black-gray theme; `cellSize` controls the longitudinal (depth-line) spacing. Based on Magic UI's Retro Grid (MIT). Use for synthwave/hero backgrounds, 80s grid floors, or a perspective texture behind content. Triggers include "retro grid", "synthwave grid", "perspective grid", "80s grid", "网格背景", "赛博网格".
+description: A retro perspective grid background that fills the whole frame — a tilted plane of lines scrolling from far to near, with optional centered text. Rendered with WebGL2 (anti-aliased, no shimmer) and no extra deps. The depth-line spacing scales with width so a small card and a 1080p render read the same. Black-gray theme; configurable angle/cell size/opacity/speed. Based on Magic UI's Retro Grid (MIT). Use for synthwave/hero backgrounds, 80s grid floors, or a perspective texture behind content. Triggers include "retro grid", "synthwave grid", "perspective grid", "80s grid", "网格背景", "赛博网格".
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
   date: "2026-11-24"
   upstream: "Magic UI — Retro Grid (MIT)"
   theme: "black-gray"
@@ -10,13 +10,11 @@ metadata:
 
 # retro-grid
 
-A retro perspective floor drawn on a 2D `<canvas>` (anti-aliased): depth lines converge on a vanishing point near the top, cross lines scroll **from the far horizon toward the viewer** (down), and the grid fades into the horizon and near edge. Defaults are tuned for a **black-gray** theme.
+A full-frame retro perspective grid rendered by a WebGL2 fragment shader: every pixel is inverse-projected onto a tilted plane, grid lines are anti-aliased with `fwidth`, and the plane scrolls **far → near** (lines move toward the viewer). The vanishing point sits just above the top, so the grid covers the frame edge-to-edge (including top corners), not just a lower floor.
 
 - Source: `src/RetroGrid.jsx` + `src/RetroGrid.css`
-- Dependencies: **none** beyond React (2D canvas)
+- Dependencies: **none** beyond React (uses the browser's WebGL2)
 - Client component (`'use client'`). Based on Magic UI (MIT). See `LICENSE.md`.
-
-> Rendering note: thin CSS/background lines translated each frame snap between pixels and shimmer; redrawing anti-aliased lines on a canvas each frame removes that.
 
 ## Usage
 
@@ -37,27 +35,28 @@ import { RetroGrid } from './magicui/retro-grid/src/RetroGrid';
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `angle` | `number` | `65` | Camera tilt, degrees (clamped 1–89). |
-| `cellSize` | `number` | `100` | Longitudinal spacing of the depth lines (px at the near edge). **Bigger = wider spacing / fewer lines.** |
+| `angle` | `number` | `65` | Plane tilt, degrees (clamped 1–89). |
+| `cellSize` | `number` | `120` | Depth-line spacing at a **1920px-wide reference**; scaled to the actual width, so a ~300px card and a 1080p render show the same number of depth lines. Bigger = fewer/wider lines. |
 | `opacity` | `number` | `0.7` | Grid line opacity (0–1). |
-| `lineColor` | `string` | `rgba(255,255,255,0.5)` | Grid line color (any CSS color). |
-| `speed` | `number` | `0.18` | Scroll speed (cycles/second). |
+| `lineColor` | `string` | `rgba(255,255,255,0.55)` | Line color (hex or rgb/rgba). |
+| `speed` | `number` | `0.12` | Scroll speed (cycles/second). |
 | `children` | `ReactNode` | — | Optional foreground content centered above the grid. |
 | `className` | `string` | `''` | Extra classes on the root. |
 | `style` | `object` | — | Inline styles on the root. |
 
-> Tuning the depth-line spacing: change `cellSize` only (e.g. `cellSize={120}` for wider spacing). The camera (`angle`), perspective, and far→near scroll direction stay the same.
+## Web (card) vs video (1080p)
+
+`cellSize` is relative to width (`cellPx = cellSize · width / 1920`), so the same prop yields the same **count** of depth lines on a small lab card and on a full 1080p render (the pixel spacing just scales). Tune `cellSize` once; both stay in proportion.
 
 ## How it works
 
-- `.retro-grid` fills a positioned parent; a `<canvas>` fills it.
-- Each frame the 2D context is cleared and redrawn:
-  - **Depth lines** (constant world x) are drawn from the near edge to a vanishing point near the top; their spacing at the near edge equals `cellSize`.
-  - **Cross lines** (constant world z) are projected with `y = horizon + span / z` and scrolled by `phase` so they move down toward the viewer (far → near).
-- Lines use fractional coordinates, so the browser anti-aliases them — smooth, no snapping/flicker.
-- A `destination-out` gradient fades the dense far/horizon band and the very near edge into the parent background.
+- A full-screen triangle pair is shaded. For each fragment, the screen point is run through the inverse of a tilted-plane homography (`u`, `v` plane coordinates), then a grid is evaluated at `(u, v − scroll) / cell`.
+- `u_scroll` increases with time; subtracting it from `v` makes lines move **down / toward the viewer** (far → near).
+- Line distance is divided by `fwidth(g)` so lines are ~1px and anti-aliased at every distance — no shimmer.
+- Parameters place the vanishing point just above the top of the canvas, so the grid fills the frame corners.
+- A thin `smoothstep` fade only at the extreme top/near edge blends it into the surface.
 - `requestAnimationFrame` advances the phase; `prefers-reduced-motion` draws a static frame. `children` render in a centered DOM overlay above the canvas.
 
 ## License & credits
 
-Based on Magic UI — Retro Grid (MIT). This version repackaged as a canvas-rendered perspective floor (no Tailwind), black-gray defaults, optional text overlay, and a shimmer-free anti-aliased render. See `LICENSE.md`.
+Based on Magic UI — Retro Grid (MIT). This version is a WebGL2 reimplementation (no Tailwind) with full-frame coverage, width-relative depth spacing (consistent for cards and 1080p), far→near scroll, black-gray defaults, and optional text overlay. See `LICENSE.md`.
