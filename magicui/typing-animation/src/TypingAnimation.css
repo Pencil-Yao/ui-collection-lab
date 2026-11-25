@@ -1,0 +1,33 @@
+.typing-animation {
+  display: inline-block;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: pre-wrap;
+}
+
+.typing-animation__cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: inherit;
+  animation: typing-cursor-blink 1s step-end infinite;
+}
+
+.typing-animation__cursor--static {
+  animation: none;
+}
+
+@keyframes typing-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typing-animation__cursor {
+    animation: none;
+  }
+}

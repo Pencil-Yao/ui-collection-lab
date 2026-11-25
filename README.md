@@ -2,7 +2,7 @@
 
 A runnable Vite + React playground and skill repository. Components are grouped by source library, and each ships its full source so it can be copied into a project.
 
-Currently: **magicui/** — `animated-circular-progress-bar`, `dia-text-reveal`, `globe`, `icon-cloud`, `meteors`, `morphing-text` (all black-gray, based on Magic UI, MIT).
+Currently: **magicui/** — `animated-circular-progress-bar`, `dia-text-reveal`, `globe`, `icon-cloud`, `meteors`, `morphing-text`, `retro-grid`, `scroll-based-velocity`, `shiny-button`, `typing-animation` (all black-gray, based on Magic UI, MIT).
 
 ## Components
 
@@ -52,6 +52,40 @@ Gooey text morph via blur + SVG alpha-threshold filter. React only.
 ```jsx
 import { MorphingText } from './magicui/morphing-text/src/MorphingText';
 <div style={{ fontSize: 56 }}><MorphingText texts={['faster', 'smarter', 'together']} /></div>
+```
+
+### magicui/retro-grid
+CSS-only perspective grid floor that scrolls toward the viewer. React only.
+
+```jsx
+import { RetroGrid } from './magicui/retro-grid/src/RetroGrid';
+<div style={{ position: 'relative', height: 360, overflow: 'hidden' }}><RetroGrid /></div>
+```
+
+### magicui/scroll-based-velocity
+Kinetic marquee rows that react to scroll velocity (motion). React + motion.
+
+```jsx
+import { ScrollVelocityContainer, ScrollVelocityRow } from './magicui/scroll-based-velocity/src/ScrollBasedVelocity';
+<ScrollVelocityContainer>
+  <ScrollVelocityRow baseVelocity={10}>CREATIVE • DESIGN • MOTION • </ScrollVelocityRow>
+</ScrollVelocityContainer>
+```
+
+### magicui/shiny-button
+Button with a looping light-sweep mask + border shine (motion). React + motion.
+
+```jsx
+import { ShinyButton } from './magicui/shiny-button/src/ShinyButton';
+<ShinyButton>Get Started</ShinyButton>
+```
+
+### magicui/typing-animation
+Typewriter effect with blinking cursor; single string or looping words (motion useInView). React + motion.
+
+```jsx
+import { TypingAnimation } from './magicui/typing-animation/src/TypingAnimation';
+<TypingAnimation words={['build faster', 'ship smarter']} loop />
 ```
 
 See each skill's `SKILL.md` for props and theming.

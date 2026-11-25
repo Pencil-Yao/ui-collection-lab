@@ -54,9 +54,9 @@ Default heads are light gray (`#d4d4d8`) with a faint white ring and a `#71717a 
 ## How it works
 
 - On mount (`useEffect`) it builds one style object per meteor with a random `left` (`-25–100%`, so some start just off the left edge and fall into view — the left side gets streaks too), `top: -5%`, `animationDelay`, `animationDuration`, and a `--angle` custom property. Styles are generated client-side to avoid SSR/hydration mismatches, so the first paint has no meteors (they appear on the next tick).
-- Each `.meteors__item` is a 2px rounded head animated by `meteors-fall`: it rotates by `--angle` and translates along the rotated axis (a more upright down-right fall at the default `240°`) while fading `1 → 0` after 70% of the run, then loops. The tail always trails behind the head.
+- Each `.meteors__item` is a 4px rounded head animated by `meteors-fall`: it rotates by `--angle` and translates along the rotated axis (a more upright down-right fall at the default `240°`) while fading `1 → 0` after 70% of the run, then loops. The tail always trails behind the head.
 - The travel distance is **scaled to the container** (a `--meteor-distance` custom property set from a `ResizeObserver`, derived from height and `angle`), so meteors cross the full height — reaching the middle and bottom of large/1080p frames instead of stopping after a fixed pixel distance.
-- The `.meteors__tail` is a 60px, 1px, right-fading gradient child (behind the head) that rotates with it, reading as a trailing streak.
+- The `.meteors__tail` is a 150px × 2px, right-fading gradient child (behind the head) that rotates with it, reading as a trailing streak.
 - The root `.meteors` is `position: absolute; inset: 0; overflow: hidden; pointer-events: none`, so it clips near the container edges and never blocks interaction.
 
 ## Accessibility

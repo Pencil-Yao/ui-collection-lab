@@ -5,6 +5,13 @@ import { Globe } from '../magicui/globe/src/Globe';
 import { IconCloud } from '../magicui/icon-cloud/src/IconCloud';
 import { Meteors } from '../magicui/meteors/src/Meteors';
 import { MorphingText } from '../magicui/morphing-text/src/MorphingText';
+import { RetroGrid } from '../magicui/retro-grid/src/RetroGrid';
+import {
+  ScrollVelocityContainer,
+  ScrollVelocityRow
+} from '../magicui/scroll-based-velocity/src/ScrollBasedVelocity';
+import { ShinyButton } from '../magicui/shiny-button/src/ShinyButton';
+import { TypingAnimation } from '../magicui/typing-animation/src/TypingAnimation';
 import { techIcons } from './techIcons';
 
 // Component IDs double as in-page anchors, e.g. `/#globe` or `/#icon-cloud`.
@@ -14,7 +21,11 @@ const COMPONENTS = [
   { id: 'globe', title: 'Globe' },
   { id: 'icon-cloud', title: 'Icon Cloud' },
   { id: 'meteors', title: 'Meteors' },
-  { id: 'morphing-text', title: 'Morphing Text' }
+  { id: 'morphing-text', title: 'Morphing Text' },
+  { id: 'retro-grid', title: 'Retro Grid' },
+  { id: 'scroll-based-velocity', title: 'Scroll Based Velocity' },
+  { id: 'shiny-button', title: 'Shiny Button' },
+  { id: 'typing-animation', title: 'Typing Animation' }
 ];
 
 const useCycle = (step = 10, interval = 1600) => {
@@ -141,6 +152,66 @@ const App = () => {
               <div className="showcase__morphing">
                 <MorphingText texts={['Morphing Text', 'Fusion Smooth', 'Gooey Blur']} />
               </div>
+            </div>
+          </figure>
+
+          <figure className="showcase__cell" id="retro-grid">
+            <figcaption className="showcase__caption">
+              <span className="showcase__title">Retro Grid</span>
+              <span className="showcase__meta">perspective</span>
+            </figcaption>
+            <div className="showcase__body showcase__body--fill">
+              <div className="showcase__retro">
+                <RetroGrid>
+                  <span className="showcase__retro-kicker">Synthwave</span>
+                  <span className="showcase__retro-title">Retro Grid</span>
+                </RetroGrid>
+              </div>
+            </div>
+          </figure>
+
+          <figure className="showcase__cell" id="scroll-based-velocity">
+            <figcaption className="showcase__caption">
+              <span className="showcase__title">Scroll Based Velocity</span>
+              <span className="showcase__meta">kinetic</span>
+            </figcaption>
+            <div className="showcase__body showcase__body--fill showcase__body--velocity">
+              <div className="showcase__velocity">
+                <ScrollVelocityContainer>
+                  <ScrollVelocityRow baseVelocity={12} direction={1}>
+                    <span className="showcase__velocity-text">CREATIVE • DESIGN • MOTION • </span>
+                  </ScrollVelocityRow>
+                  <ScrollVelocityRow baseVelocity={12} direction={-1}>
+                    <span className="showcase__velocity-text showcase__velocity-text--dim">
+                      BUILD FASTER • SHIP SMARTER • SCALE EASIER •{' '}
+                    </span>
+                  </ScrollVelocityRow>
+                </ScrollVelocityContainer>
+              </div>
+            </div>
+          </figure>
+
+          <figure className="showcase__cell" id="shiny-button">
+            <figcaption className="showcase__caption">
+              <span className="showcase__title">Shiny Button</span>
+              <span className="showcase__meta">shine</span>
+            </figcaption>
+            <div className="showcase__body">
+              <ShinyButton type="button">Get Started</ShinyButton>
+            </div>
+          </figure>
+
+          <figure className="showcase__cell" id="typing-animation">
+            <figcaption className="showcase__caption">
+              <span className="showcase__title">Typing Animation</span>
+              <span className="showcase__meta">typewriter</span>
+            </figcaption>
+            <div className="showcase__body">
+              <TypingAnimation
+                className="showcase__typing"
+                words={['Typing Animation', 'Build Faster', 'Ship Smarter']}
+                loop
+              />
             </div>
           </figure>
         </div>

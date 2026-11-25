@@ -1,0 +1,27 @@
+.scroll-velocity {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.scroll-velocity__row {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.scroll-velocity__track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.scroll-velocity__copy {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  white-space: nowrap;
+}
