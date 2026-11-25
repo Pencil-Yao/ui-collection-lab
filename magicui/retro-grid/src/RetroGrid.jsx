@@ -163,7 +163,9 @@ export function RetroGrid({
       canvas.width = width;
       canvas.height = height;
       gl.viewport(0, 0, width, height);
-      cellPx = Math.max(4, cellSize * dpr);
+      // Scale the cell with the canvas so small cards don't look like a
+      // close-up of the grid (i.e. the camera reads as farther / higher).
+      cellPx = Math.max(4, cellSize * (height / 1080));
     };
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : null;
     observer?.observe(canvas);
@@ -175,8 +177,10 @@ export function RetroGrid({
       const sin = Math.sin(a);
       const cos = Math.cos(a);
       const cot = cos / sin;
-      const d = height * 0.6;
-      const cy = -0.12 * height + d * cot;
+      // Camera "raised": a farther perspective distance + vanishing point one
+      // screen above the top keeps the near grid from looking close-up.
+      const d = height * 2.0;
+      const cy = -height + d * cot;
       const cx = width / 2;
 
       gl.clear(gl.COLOR_BUFFER_BIT);
